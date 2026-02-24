@@ -1,4 +1,18 @@
-.env.local
+# dependencies
+node_modules/
 
-/src/generated/prisma
+# next.js
+.next/
+out/
+
+# env files
 .env
+.env.local
+.env.*.local
+
+# prisma generated
+/src/generated/prisma
+
+# misc
+.DS_Store
+*.pem
