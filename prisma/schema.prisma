@@ -1,0 +1,78 @@
+// Prisma schema for Digital Herdsman
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Category {
+  beef
+  pork
+  chicken
+  lamb
+  fish
+  eggs
+  dairy
+  honey
+  preserves
+  vegetables
+  fruit
+  other
+}
+
+enum PricingMode {
+  per_weight
+  fixed
+}
+
+enum ItemStatus {
+  available
+  sold
+  reserved
+}
+
+model Farm {
+  id        String          @id @default(uuid())
+  name      String
+  ownerId   String          @map("owner_id")
+  createdAt DateTime        @default(now()) @map("created_at")
+  products  ProductType[]
+  items     InventoryItem[]
+
+  @@map("farms")
+}
+
+model ProductType {
+  id          String          @id @default(uuid())
+  farmId      String          @map("farm_id")
+  name        String
+  category    Category
+  pricingMode PricingMode     @map("pricing_mode")
+  price       Decimal         @db.Decimal(10, 2)
+  unit        String
+  archived    Boolean         @default(false)
+  farm        Farm            @relation(fields: [farmId], references: [id])
+  items       InventoryItem[]
+
+  @@map("product_types")
+}
+
+model InventoryItem {
+  id            String      @id @default(uuid())
+  farmId        String      @map("farm_id")
+  productTypeId String      @map("product_type_id")
+  weight        Decimal?    @db.Decimal(10, 3)
+  price         Decimal     @db.Decimal(10, 2)
+  status        ItemStatus  @default(available)
+  qrCodeUrl     String?     @map("qr_code_url")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  farm          Farm        @relation(fields: [farmId], references: [id])
+  productType   ProductType @relation(fields: [productTypeId], references: [id])
+
+  @@map("inventory_items")
+}
