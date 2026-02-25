@@ -12,14 +12,20 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "moduleNameMapper": { "^@/(.*)$": "<rootDir>/src/$1" }
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
+    "@types/pg": "^8.16.0",
     "html2canvas": "^1.4.1",
+    "lucide-react": "^0.575.0",
     "next": "16.1.6",
+    "pg": "^8.19.0",
     "prisma": "^7.4.1",
     "qrcode": "^1.5.4",
     "react": "19.2.3",
