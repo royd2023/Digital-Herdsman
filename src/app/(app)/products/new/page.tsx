@@ -6,46 +6,56 @@ const CATEGORIES = [
   'vegetables','fruit','other'
 ]
 
+const inputClass = "w-full px-4 py-3 bg-[#141410] border border-[#2e2e26] rounded-xl text-[#f0ead8] placeholder-[#4a4840] text-sm focus:outline-none focus:border-[#c9a84c] transition-colors"
+const labelClass = "block text-xs font-medium text-[#8a8470] uppercase tracking-widest mb-1.5"
+
 export default function NewProductPage() {
   return (
-    <main className="px-4 pt-6">
-      <h1 className="text-xl font-bold text-stone-800 mb-6">New product type</h1>
-      <form className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1">Name</label>
-          <input name="name" type="text" placeholder="e.g. Ribeye Steak" required
-            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1">Category</label>
-          <select name="category" required
-            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white">
-            {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1">Pricing</label>
-          <select name="pricingMode" required
-            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 bg-white">
-            <option value="per_weight">Per weight ($/lb)</option>
-            <option value="fixed">Fixed price</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1">Price ($)</label>
-          <input name="price" type="number" step="0.01" min="0" placeholder="0.00" required
-            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1">Unit</label>
-          <input name="unit" type="text" placeholder="e.g. lbs, dozen, jar" required
-            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" />
-        </div>
-        <button formAction={addProduct}
-          className="w-full py-3 bg-green-700 text-white font-medium rounded-lg hover:bg-green-800 transition-colors">
-          Save product type
-        </button>
-      </form>
+    <main className="px-4 pt-8">
+      <div className="mb-8">
+        <p className="text-xs text-[#8a8470] uppercase tracking-widest mb-1">Catalogue</p>
+        <h1 className="font-serif text-3xl text-[#f0ead8]">New product</h1>
+      </div>
+
+      <div className="bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-5">
+        <form className="space-y-5">
+          <div>
+            <label htmlFor="prod-name" className={labelClass}>Name</label>
+            <input id="prod-name" name="name" type="text" placeholder="e.g. Ribeye Steak" required className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="prod-category" className={labelClass}>Category</label>
+            <select id="prod-category" name="category" required className={inputClass + ' appearance-none'}>
+              {CATEGORIES.map(c => (
+                <option key={c} value={c} className="bg-[#1c1c17]">
+                  {c.charAt(0).toUpperCase() + c.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="prod-pricing" className={labelClass}>Pricing</label>
+            <select id="prod-pricing" name="pricingMode" required className={inputClass + ' appearance-none'}>
+              <option value="per_weight" className="bg-[#1c1c17]">Per weight ($/lb)</option>
+              <option value="fixed" className="bg-[#1c1c17]">Fixed price</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="prod-price" className={labelClass}>Price ($)</label>
+            <input id="prod-price" name="price" type="number" step="0.01" min="0" placeholder="0.00" required className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="prod-unit" className={labelClass}>Unit</label>
+            <input id="prod-unit" name="unit" type="text" placeholder="e.g. lbs, dozen, jar" required className={inputClass} />
+          </div>
+          <button
+            formAction={addProduct}
+            className="w-full py-3.5 bg-[#c9a84c] text-[#141410] font-bold rounded-xl hover:bg-[#dbb95e] active:bg-[#b8963e] transition-colors text-sm tracking-wide uppercase"
+          >
+            Save product
+          </button>
+        </form>
+      </div>
     </main>
   )
 }
