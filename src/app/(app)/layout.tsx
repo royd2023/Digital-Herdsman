@@ -12,7 +12,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!farm) redirect('/onboarding')
 
   return (
-    <div className="min-h-screen bg-stone-50 pb-20">
+    <div className="min-h-screen bg-[#141410] pb-20">
       {children}
       <BottomNav />
     </div>
