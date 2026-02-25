@@ -15,10 +15,11 @@ export default function OnboardingPage() {
         <div className="bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-6">
           <form className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium text-[#8a8470] uppercase tracking-widest">
+              <label htmlFor="farm-name" className="block text-xs font-medium text-[#8a8470] uppercase tracking-widest">
                 Farm name
               </label>
               <input
+                id="farm-name"
                 name="name"
                 type="text"
                 placeholder="e.g. Johnson Family Farm"
