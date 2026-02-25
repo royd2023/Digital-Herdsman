@@ -10,12 +10,16 @@ export default async function AddItemPage() {
   const products = await getProductsByFarm(farm!.id)
 
   return (
-    <main className="px-4 pt-6">
-      <h1 className="text-xl font-bold text-stone-800 mb-6">Add item</h1>
+    <main className="px-4 pt-8">
+      <div className="mb-8">
+        <p className="text-xs text-[#8a8470] uppercase tracking-widest mb-1">Inventory</p>
+        <h1 className="font-serif text-3xl text-[#f0ead8]">Add item</h1>
+      </div>
       {products.length === 0 ? (
-        <p className="text-stone-400 text-center py-12">
-          No products yet. Go to Products to add some first.
-        </p>
+        <div className="text-center py-16">
+          <p className="text-[#8a8470] text-sm">No products yet.</p>
+          <p className="text-[#4a4840] text-xs mt-1">Go to Products to add some first.</p>
+        </div>
       ) : (
         <AddItemForm products={products} />
       )}
