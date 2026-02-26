@@ -8,9 +8,6 @@ import type { ProductType } from '@/generated/prisma/client'
 
 type Props = { products: ProductType[] }
 
-const inputClass = "w-full px-4 py-3 bg-[#141410] border border-[#2e2e26] rounded-xl text-[#f0ead8] placeholder-[#4a4840] text-sm focus:outline-none focus:border-[#c9a84c] transition-colors"
-const labelClass = "block text-xs font-medium text-[#8a8470] uppercase tracking-widest mb-1.5"
-
 export default function AddItemForm({ products }: Props) {
   const [selectedId, setSelectedId] = useState('')
   const [weight, setWeight] = useState('')
@@ -62,80 +59,103 @@ export default function AddItemForm({ products }: Props) {
 
   if (preview && selected) {
     return (
-      <div className="space-y-3">
-        <div className="bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-6 text-center">
-          <p className="text-xs text-[#8a8470] uppercase tracking-widest mb-1">{selected.name}</p>
-          <p className="font-serif text-4xl text-[#f0ead8] mb-1">${preview.price.toFixed(2)}</p>
-          {weight && <p className="text-xs text-[#8a8470] mb-4">{weight} lbs</p>}
-          <div className="inline-block p-3 bg-white rounded-xl mx-auto">
-            <img src={preview.qrUrl} alt="QR code" className="w-36 h-36" />
+      <div className="px-6 pt-8 space-y-5">
+        {/* Success — label artifact */}
+        <div className="text-center border-b border-[#1e1e1a] pb-8">
+          <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-1">{selected.name}</p>
+          <p
+            className="font-serif text-[#c9a84c] leading-none tracking-tight"
+            style={{ fontSize: 'clamp(3.5rem, 18vw, 5.5rem)' }}
+          >
+            ${preview.price.toFixed(2)}
+          </p>
+          {weight && (
+            <p className="text-[#7a7464] text-xs mt-2 tracking-wide">{weight} lbs</p>
+          )}
+
+          <div className="flex justify-center mt-7">
+            {/* QR price-tag card */}
+            <div className="bg-white p-4 relative">
+              <img src={preview.qrUrl} alt="QR code" className="w-40 h-40 block" />
+              <div className="absolute top-0 left-0 w-3 h-3 bg-[#c9a84c]" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#c9a84c]" />
+            </div>
           </div>
         </div>
+
         <button
           onClick={handleShare}
-          className="w-full py-3.5 bg-[#c9a84c] text-[#141410] font-bold rounded-xl hover:bg-[#dbb95e] transition-colors text-sm tracking-wide uppercase"
+          className="w-full py-4 bg-[#c9a84c] text-[#0f0f0c] font-bold text-sm tracking-[0.15em] uppercase transition-colors hover:bg-[#e8c06a] active:bg-[#b8963e] rounded-none"
         >
           Share label
         </button>
         <button
           onClick={() => { setPreview(null); setWeight(''); setSelectedId('') }}
-          className="w-full py-3 border border-[#2e2e26] text-[#8a8470] font-medium rounded-xl hover:border-[#c9a84c] hover:text-[#f0ead8] transition-colors text-sm"
+          className="w-full py-4 border border-[#2a2a24] text-[#7a7464] font-medium text-sm tracking-[0.1em] uppercase transition-colors hover:border-[#c9a84c] hover:text-[#ede7d3] rounded-none"
         >
-          Add another item
+          Add another
         </button>
       </div>
     )
   }
 
   return (
-    <div className="bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-5">
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label htmlFor="product-select" className={labelClass}>Product type</label>
-          <select
-            id="product-select"
-            value={selectedId}
-            onChange={e => setSelectedId(e.target.value)}
+    <form onSubmit={handleSubmit} className="px-6 pt-2">
+      <div className="py-5 border-b border-[#1e1e1a]">
+        <label htmlFor="product-select" className="block text-[10px] tracking-[0.25em] text-[#7a7464] uppercase mb-2">
+          Product type
+        </label>
+        <select
+          id="product-select"
+          value={selectedId}
+          onChange={e => setSelectedId(e.target.value)}
+          required
+          className="input-ledger appearance-none"
+        >
+          <option value="" className="bg-[#1a1a15]">Select a product…</option>
+          {products.map(p => (
+            <option key={p.id} value={p.id} className="bg-[#1a1a15]">{p.name}</option>
+          ))}
+        </select>
+      </div>
+
+      {selected?.pricingMode === 'per_weight' && (
+        <div className="py-5 border-b border-[#1e1e1a]">
+          <label htmlFor="weight-input" className="block text-[10px] tracking-[0.25em] text-[#7a7464] uppercase mb-2">
+            Weight (lbs)
+          </label>
+          <input
+            id="weight-input"
+            type="number"
+            step="0.001"
+            min="0"
+            value={weight}
+            onChange={e => setWeight(e.target.value)}
+            placeholder="0.000"
             required
-            className={inputClass + ' appearance-none'}
-          >
-            <option value="" className="bg-[#1c1c17]">Select a product…</option>
-            {products.map(p => (
-              <option key={p.id} value={p.id} className="bg-[#1c1c17]">{p.name}</option>
-            ))}
-          </select>
+            className="input-ledger text-lg"
+          />
         </div>
+      )}
 
-        {selected?.pricingMode === 'per_weight' && (
-          <div>
-            <label htmlFor="weight-input" className={labelClass}>Weight (lbs)</label>
-            <input
-              id="weight-input"
-              type="number" step="0.001" min="0"
-              value={weight}
-              onChange={e => setWeight(e.target.value)}
-              placeholder="0.000"
-              required
-              className={inputClass}
-            />
-          </div>
-        )}
+      {livePrice !== null && (
+        <div className="py-6 border-b border-[#1e1e1a] text-center">
+          <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-1">Price</p>
+          <p className="font-serif text-[#c9a84c] leading-none" style={{ fontSize: 'clamp(2.5rem, 14vw, 4rem)' }}>
+            ${livePrice.toFixed(2)}
+          </p>
+        </div>
+      )}
 
-        {livePrice !== null && (
-          <div className="bg-[#141410] border border-[#2e2e26] rounded-xl p-4 text-center">
-            <p className="text-xs text-[#8a8470] uppercase tracking-widest mb-0.5">Price</p>
-            <p className="font-serif text-3xl text-[#c9a84c]">${livePrice.toFixed(2)}</p>
-          </div>
-        )}
-
+      <div className="pt-8">
         <button
           type="submit"
           disabled={loading || !selected || (selected.pricingMode === 'per_weight' && !weight)}
-          className="w-full py-3.5 bg-[#c9a84c] text-[#141410] font-bold rounded-xl hover:bg-[#dbb95e] disabled:opacity-30 transition-colors text-sm tracking-wide uppercase"
+          className="w-full py-4 bg-[#c9a84c] text-[#0f0f0c] font-bold text-sm tracking-[0.15em] uppercase transition-colors hover:bg-[#e8c06a] active:bg-[#b8963e] disabled:opacity-25 disabled:cursor-not-allowed rounded-none"
         >
           {loading ? 'Saving…' : 'Generate label'}
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   )
 }
