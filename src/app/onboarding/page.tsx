@@ -2,21 +2,43 @@ import { setupFarm } from './actions'
 
 export default function OnboardingPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-stone-50 px-4">
-      <div className="w-full max-w-sm">
-        <h1 className="text-xl font-bold text-stone-800 mb-2">Set up your farm</h1>
-        <p className="text-stone-500 text-sm mb-6">What&apos;s your farm called?</p>
-        <form className="space-y-4">
-          <input
-            name="name"
-            type="text"
-            placeholder="e.g. Johnson Family Farm"
-            required
-            className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-stone-900 focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
+    <main className="min-h-screen flex flex-col bg-[#0f0f0c] px-7">
+      <div className="flex-1 flex flex-col justify-center pt-20 pb-10">
+        <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-6">
+          Getting started
+        </p>
+        <h1
+          className="font-serif italic text-[#ede7d3] leading-[0.88] tracking-tight"
+          style={{ fontSize: 'clamp(3rem, 14vw, 5rem)' }}
+        >
+          Name your<br />
+          <span className="text-[#c9a84c]">farm.</span>
+        </h1>
+        <span className="rule-amber mt-6 w-16" />
+        <p className="mt-5 text-sm text-[#7a7464]">
+          This will appear on your product labels.
+        </p>
+      </div>
+
+      <div className="pb-12">
+        <form className="space-y-0">
+          <div className="pt-5 pb-8">
+            <label htmlFor="farm-name" className="block text-[10px] tracking-[0.25em] text-[#7a7464] uppercase mb-2">
+              Farm name
+            </label>
+            <input
+              id="farm-name"
+              name="name"
+              type="text"
+              placeholder="e.g. Johnson Family Farm"
+              required
+              autoFocus
+              className="input-ledger text-lg"
+            />
+          </div>
           <button
             formAction={setupFarm}
-            className="w-full py-3 bg-green-700 text-white font-medium rounded-lg hover:bg-green-800 transition-colors"
+            className="w-full py-4 bg-[#c9a84c] text-[#0f0f0c] font-bold rounded-none text-sm tracking-[0.15em] uppercase transition-colors hover:bg-[#e8c06a] active:bg-[#b8963e]"
           >
             Create farm
           </button>

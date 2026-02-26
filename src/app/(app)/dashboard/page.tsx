@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getFarmByOwner } from '@/lib/farm'
 import { getInventoryByFarm } from '@/lib/inventory'
 import Link from 'next/link'
+import LogoutButton from './LogoutButton'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -13,43 +14,73 @@ export default async function DashboardPage() {
   const sold = items.filter(i => i.status === 'sold')
 
   return (
-    <main className="px-4 pt-6">
-      <h1 className="text-xl font-bold text-stone-800 mb-1">{farm!.name}</h1>
-      <div className="flex gap-3 mb-6">
-        <div className="flex-1 bg-green-50 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-green-700">{available.length}</p>
-          <p className="text-xs text-green-600">Available</p>
+    <main className="pb-4">
+      {/* Hero header */}
+      <div className="px-6 pt-10 pb-8 border-b border-[#1e1e1a]">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase">Your farm</p>
+          <LogoutButton />
         </div>
-        <div className="flex-1 bg-stone-100 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-stone-600">{sold.length}</p>
-          <p className="text-xs text-stone-500">Sold</p>
+        <h1
+          className="font-serif italic text-[#ede7d3] leading-[0.88] tracking-tight"
+          style={{ fontSize: 'clamp(2.8rem, 13vw, 4.5rem)' }}
+        >
+          {farm!.name}
+        </h1>
+        <span className="rule-amber mt-5 w-12" />
+
+        {/* Stats row */}
+        <div className="flex gap-8 mt-7">
+          <div>
+            <p className="font-serif text-5xl text-[#c9a84c] leading-none">{available.length}</p>
+            <p className="text-[10px] tracking-[0.2em] text-[#7a7464] uppercase mt-1.5">Available</p>
+          </div>
+          <div className="w-px bg-[#2a2a24] self-stretch" />
+          <div>
+            <p className="font-serif text-5xl text-[#ede7d3] leading-none">{sold.length}</p>
+            <p className="text-[10px] tracking-[0.2em] text-[#7a7464] uppercase mt-1.5">Sold</p>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-2">
-        {items.map(item => (
-          <Link
-            key={item.id}
-            href={`/dashboard/${item.id}`}
-            className="flex items-center justify-between bg-white rounded-xl p-4 shadow-sm"
-          >
-            <div>
-              <p className="font-medium text-stone-800">{item.productType.name}</p>
-              <p className="text-sm text-stone-500">
-                {item.weight ? `${item.weight} lbs · ` : ''} ${Number(item.price).toFixed(2)}
-              </p>
-            </div>
-            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-              item.status === 'available'
-                ? 'bg-green-100 text-green-700'
-                : 'bg-stone-100 text-stone-500'
-            }`}>
-              {item.status}
-            </span>
-          </Link>
-        ))}
-        {items.length === 0 && (
-          <p className="text-center text-stone-400 py-12">No items yet. Tap + to add one.</p>
+      {/* Inventory — ledger rows */}
+      <div>
+        {items.length === 0 ? (
+          <div className="px-6 py-16 text-center">
+            <p className="text-[#7a7464] text-sm">No items yet.</p>
+            <p className="text-[#4a4840] text-xs mt-1">Tap Add Item to get started.</p>
+          </div>
+        ) : (
+          <div>
+            {items.map((item, idx) => (
+              <Link
+                key={item.id}
+                href={`/dashboard/${item.id}`}
+                className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1a] transition-colors active:bg-[#1a1a15] group"
+              >
+                {/* Left amber accent on touch */}
+                <div className="flex items-center gap-4 min-w-0">
+                  <span className="text-[#2a2a24] font-serif text-sm tabular-nums select-none w-6 text-right shrink-0">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[#ede7d3] text-sm font-medium truncate">{item.productType.name}</p>
+                    <p className="text-[#7a7464] text-xs mt-0.5">
+                      {item.weight ? `${Number(item.weight).toFixed(2)} lbs · ` : ''}
+                      <span className="text-[#c9a84c]">${Number(item.price).toFixed(2)}</span>
+                    </p>
+                  </div>
+                </div>
+                <span className={`ml-4 shrink-0 text-[9px] px-2 py-0.5 font-bold uppercase tracking-[0.15em] ${
+                  item.status === 'available'
+                    ? 'text-[#6db88a] bg-[#182e20]'
+                    : 'text-[#4a4840] bg-[#1e1e1a]'
+                }`}>
+                  {item.status}
+                </span>
+              </Link>
+            ))}
+          </div>
         )}
       </div>
     </main>
