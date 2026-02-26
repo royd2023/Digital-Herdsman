@@ -14,31 +14,66 @@ export default async function ItemDetailPage({ params }: { params: Promise<{ id:
   const qrUrl = await generateQRDataUrl(item.id, process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000')
 
   return (
-    <main className="px-4 pt-8">
-      <div className="mb-6">
-        <p className="text-xs text-[#8a8470] uppercase tracking-widest mb-1">{item.farm.name}</p>
-        <h1 className="font-serif text-3xl text-[#f0ead8] leading-tight">{item.productType.name}</h1>
-        <div className="mt-2 h-px w-10 bg-[#c9a84c]" />
+    <main className="pb-6">
+      {/* Header */}
+      <div className="px-6 pt-10 pb-6 border-b border-[#1e1e1a]">
+        <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-2">{item.farm.name}</p>
+        <h1
+          className="font-serif italic text-[#ede7d3] leading-[0.9] tracking-tight"
+          style={{ fontSize: 'clamp(2.2rem, 11vw, 3.5rem)' }}
+        >
+          {item.productType.name}
+        </h1>
+        <span className="rule-amber mt-4 w-10" />
       </div>
 
-      <div className="bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-6 text-center mb-3">
-        <div className="inline-block p-3 bg-white rounded-xl mb-4">
-          <img src={qrUrl} alt="QR code" className="w-36 h-36" />
-        </div>
-        <p className="font-serif text-4xl text-[#f0ead8]">${Number(item.price).toFixed(2)}</p>
+      {/* Price — the hero */}
+      <div className="px-6 pt-10 pb-8 border-b border-[#1e1e1a] text-center">
+        <p className="text-[10px] tracking-[0.3em] text-[#7a7464] uppercase mb-3">Price</p>
+        <p
+          className="font-serif text-[#c9a84c] leading-none tracking-tight"
+          style={{ fontSize: 'clamp(4.5rem, 22vw, 7rem)' }}
+        >
+          ${Number(item.price).toFixed(2)}
+        </p>
         {item.weight && (
-          <p className="text-sm text-[#8a8470] mt-1">{Number(item.weight).toFixed(3)} lbs</p>
+          <p className="text-[#7a7464] text-sm mt-3 tracking-wide">
+            {Number(item.weight).toFixed(3)} lbs
+          </p>
         )}
-        <span className={`inline-block mt-3 text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wide ${
-          item.status === 'available'
-            ? 'bg-[#1e3a2a] text-[#7dbf94]'
-            : 'bg-[#252520] text-[#8a8470]'
-        }`}>
-          {item.status}
-        </span>
+        <div className="mt-4">
+          <span className={`inline-block text-[9px] px-3 py-1 font-bold uppercase tracking-[0.2em] ${
+            item.status === 'available'
+              ? 'text-[#6db88a] bg-[#182e20]'
+              : 'text-[#4a4840] bg-[#1e1e1a]'
+          }`}>
+            {item.status}
+          </span>
+        </div>
       </div>
 
-      {item.status === 'available' && <MarkSoldButton itemId={item.id} />}
+      {/* QR label — the artifact */}
+      <div className="px-6 pt-8 pb-4">
+        <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-5 text-center">
+          Scan label
+        </p>
+        <div className="flex justify-center">
+          {/* White label card — QR must have white bg to scan */}
+          <div className="bg-white p-5 relative">
+            <img src={qrUrl} alt="QR code" className="w-40 h-40 block" />
+            {/* Amber corner accent */}
+            <div className="absolute top-0 left-0 w-3 h-3 bg-[#c9a84c]" />
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#c9a84c]" />
+          </div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      {item.status === 'available' && (
+        <div className="px-6 pt-6">
+          <MarkSoldButton itemId={item.id} />
+        </div>
+      )}
     </main>
   )
 }
