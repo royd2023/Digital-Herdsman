@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getFarmByOwner } from '@/lib/farm'
 import { getInventoryByFarm } from '@/lib/inventory'
 import Link from 'next/link'
+import LogoutButton from './LogoutButton'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -16,7 +17,10 @@ export default async function DashboardPage() {
     <main className="pb-4">
       {/* Hero header */}
       <div className="px-6 pt-10 pb-8 border-b border-[#1e1e1a]">
-        <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-3">Your farm</p>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase">Your farm</p>
+          <LogoutButton />
+        </div>
         <h1
           className="font-serif italic text-[#ede7d3] leading-[0.88] tracking-tight"
           style={{ fontSize: 'clamp(2.8rem, 13vw, 4.5rem)' }}
