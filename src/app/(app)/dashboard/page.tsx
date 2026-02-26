@@ -13,50 +13,69 @@ export default async function DashboardPage() {
   const sold = items.filter(i => i.status === 'sold')
 
   return (
-    <main className="px-4 pt-8 pb-4">
-      <div className="mb-6">
-        <p className="text-xs text-[#8a8470] uppercase tracking-widest mb-1">Your farm</p>
-        <h1 className="font-serif text-3xl text-[#f0ead8] leading-tight">{farm!.name}</h1>
-        <div className="mt-2 h-px w-10 bg-[#c9a84c]" />
+    <main className="pb-4">
+      {/* Hero header */}
+      <div className="px-6 pt-10 pb-8 border-b border-[#1e1e1a]">
+        <p className="text-[10px] tracking-[0.3em] text-[#4a4840] uppercase mb-3">Your farm</p>
+        <h1
+          className="font-serif italic text-[#ede7d3] leading-[0.88] tracking-tight"
+          style={{ fontSize: 'clamp(2.8rem, 13vw, 4.5rem)' }}
+        >
+          {farm!.name}
+        </h1>
+        <span className="rule-amber mt-5 w-12" />
+
+        {/* Stats row */}
+        <div className="flex gap-8 mt-7">
+          <div>
+            <p className="font-serif text-5xl text-[#c9a84c] leading-none">{available.length}</p>
+            <p className="text-[10px] tracking-[0.2em] text-[#7a7464] uppercase mt-1.5">Available</p>
+          </div>
+          <div className="w-px bg-[#2a2a24] self-stretch" />
+          <div>
+            <p className="font-serif text-5xl text-[#ede7d3] leading-none">{sold.length}</p>
+            <p className="text-[10px] tracking-[0.2em] text-[#7a7464] uppercase mt-1.5">Sold</p>
+          </div>
+        </div>
       </div>
 
-      <div className="flex gap-3 mb-8">
-        <div className="flex-1 bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-4">
-          <p className="text-2xl font-bold text-[#c9a84c]">{available.length}</p>
-          <p className="text-xs text-[#8a8470] mt-0.5 uppercase tracking-wide">Available</p>
-        </div>
-        <div className="flex-1 bg-[#1c1c17] border border-[#2e2e26] rounded-2xl p-4">
-          <p className="text-2xl font-bold text-[#f0ead8]">{sold.length}</p>
-          <p className="text-xs text-[#8a8470] mt-0.5 uppercase tracking-wide">Sold</p>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        {items.map(item => (
-          <Link
-            key={item.id}
-            href={`/dashboard/${item.id}`}
-            className="flex items-center justify-between bg-[#1c1c17] border border-[#2e2e26] rounded-2xl px-4 py-3.5 active:bg-[#252520] transition-colors"
-          >
-            <div>
-              <p className="font-medium text-[#f0ead8] text-sm">{item.productType.name}</p>
-              <p className="text-xs text-[#8a8470] mt-0.5">
-                {item.weight ? `${Number(item.weight).toFixed(2)} lbs · ` : ''}${Number(item.price).toFixed(2)}
-              </p>
-            </div>
-            <span className={`text-[10px] px-2.5 py-1 rounded-full font-semibold uppercase tracking-wide ${
-              item.status === 'available'
-                ? 'bg-[#1e3a2a] text-[#7dbf94]'
-                : 'bg-[#252520] text-[#8a8470]'
-            }`}>
-              {item.status}
-            </span>
-          </Link>
-        ))}
-        {items.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-[#8a8470] text-sm">No items yet.</p>
+      {/* Inventory — ledger rows */}
+      <div>
+        {items.length === 0 ? (
+          <div className="px-6 py-16 text-center">
+            <p className="text-[#7a7464] text-sm">No items yet.</p>
             <p className="text-[#4a4840] text-xs mt-1">Tap Add Item to get started.</p>
+          </div>
+        ) : (
+          <div>
+            {items.map((item, idx) => (
+              <Link
+                key={item.id}
+                href={`/dashboard/${item.id}`}
+                className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1a] transition-colors active:bg-[#1a1a15] group"
+              >
+                {/* Left amber accent on touch */}
+                <div className="flex items-center gap-4 min-w-0">
+                  <span className="text-[#2a2a24] font-serif text-sm tabular-nums select-none w-6 text-right shrink-0">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[#ede7d3] text-sm font-medium truncate">{item.productType.name}</p>
+                    <p className="text-[#7a7464] text-xs mt-0.5">
+                      {item.weight ? `${Number(item.weight).toFixed(2)} lbs · ` : ''}
+                      <span className="text-[#c9a84c]">${Number(item.price).toFixed(2)}</span>
+                    </p>
+                  </div>
+                </div>
+                <span className={`ml-4 shrink-0 text-[9px] px-2 py-0.5 font-bold uppercase tracking-[0.15em] ${
+                  item.status === 'available'
+                    ? 'text-[#6db88a] bg-[#182e20]'
+                    : 'text-[#4a4840] bg-[#1e1e1a]'
+                }`}>
+                  {item.status}
+                </span>
+              </Link>
+            ))}
           </div>
         )}
       </div>
